@@ -1,25 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<title>Facilities</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Facilities</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>School Facilities</h1>
+<header>
+    <h1 class="title">Our School Facilities</h1>
+</header>
+
+<main>
+
+<section class="facilities">
 
 <ul>
 
-<li>Experienced Teachers</li>
-<li>CCTV in Classrooms</li>
-<li>Smart Classrooms</li>
-<li>Computer Education</li>
-<li>Clean Drinking Water</li>
-<li>Sports Activities</li>
-<li>Generator Facility</li>
+<li>Experienced and Qualified Teachers</li>
+<li>CCTV Surveillance in Classrooms</li>
+<li>Smart Digital Classrooms</li>
+<li>Computer Education Lab</li>
+<li>Clean and Safe Drinking Water</li>
+<li>Sports and Physical Activities</li>
+<li>24/7 Generator Power Backup</li>
 
 </ul>
 
+</section>
+
+</main>
+
+<footer>
+<p>© 2026 School Name | All Rights Reserved</p>
+</footer>
+
 </body>
-</html>
+</html>body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    padding:0;
+    background: linear-gradient(120deg,#74ebd5,#ACB6E5);
+    text-align:center;
+}
+
+/* Title Animation */
+
+.title{
+    margin-top:40px;
+    font-size:40px;
+    color:#333;
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* Facilities Box */
+
+.facilities{
+    width:60%;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    animation: slideUp 1.5s ease;
+}
+
+/* List Style */
+
+ul{
+    list-style:none;
+    padding:0;
+}
+
+li{
+    font-size:18px;
+    padding:12px;
+    margin:10px 0;
+    background:#f2f2f2;
+    border-radius:8px;
+    transition:0.3s;
+}
+
+/* Hover Animation */
+
+li:hover{
+    background:#4CAF50;
+    color:white;
+    transform:scale(1.05);
+}
+
+/* Footer */
+
+footer{
+    margin-top:30px;
+    padding:15px;
+    background:#333;
+    color:white;
+}
+
+/* Animations */
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(-20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes slideUp{
+    from{
+        opacity:0;
+        transform:translateY(50px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
