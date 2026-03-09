@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIC Digital Portal - Suraj Maurya</title>
+    <title>दिलेश्वरी इण्टर कॉलेज - डिजिटल पोर्टल</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root { 
-            --tiranga-orange: #FF9933; 
-            --tiranga-white: #FFFFFF; 
-            --tiranga-green: #128807; 
-            --primary: #000080; 
-            --dark: #000; 
+            --primary: #003366; 
+            --secondary: #f4b400; 
+            --tiranga-orange: #FF9933;
+            --tiranga-green: #128807;
+            --text: #333; 
         }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--dark); color: white; overflow: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; color: var(--text); overflow-x: hidden; }
 
-        /* --- 1. WELCOME SPLASH SCREEN --- */
+        /* --- 1. WELCOME SPLASH SCREEN (Opening Animation) --- */
         #start-overlay {
             position: fixed; inset: 0; background: #000; color: white;
             display: flex; align-items: center; justify-content: center;
@@ -24,1148 +24,161 @@
         }
         .splash-content { text-align: center; width: 100%; }
         
-        /* --- 2. LOGIN SCREEN --- */
-        #auth-screen { 
-            display: none; position: fixed; inset: 0; background: #f0f2f5; 
-            z-index: 20000; align-items: center; justify-content: center; padding: 20px;
-        }
-        .auth-card { 
-            background: white; padding: 25px; border-radius: 20px; color: #333;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px;
-            border-top: 5px solid var(--tiranga-orange);
-        }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-
-        /* --- 3. MAIN APP UI --- */
-        #main-app { display: none; padding-top: 65px; height: 100vh; background: var(--dark); }
-        .app-header { 
-            position: fixed; top: 0; width: 100%; height: 60px; background: #111; 
-            display: flex; align-items: center; justify-content: space-between; padding: 0 15px; z-index: 1000; border-bottom: 1px solid #222;
-        }
-        .page { display: none; height: calc(100vh - 140px); overflow-y: auto; padding: 15px; }
-        .active-page { display: block; }
-
-        /* UI Elements */
-        .timing-card { background: #1a1a1a; padding: 15px; border-radius: 15px; margin-top: 15px; border-left: 5px solid var(--primary); display: flex; align-items: center; gap: 15px; }
-        .notice-box { background: #fff; color: #000; padding: 15px; border-radius: 15px; margin-top: 15px; border-right: 5px solid var(--tiranga-green); }
-        .btn-main { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        
-        nav { position: fixed; bottom: 0; width: 100%; background: #000; display: grid; grid-template-columns: repeat(6, 1fr); padding: 12px 0; border-top: 1px solid #333; }
-        .nav-item { color: #888; text-align: center; font-size: 18px; cursor: pointer; }
-        .nav-item.active { color: var(--tiranga-orange); }
-        .nav-item span { font-size: 9px; display: block; }
-
-        /* Animations */
-        @keyframes zoomIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes loadProgress { from { width: 0%; } to { width: 100%; } }
+        @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* ============ REELS PAGE STYLES ============ */
-        #reels-page { padding: 0; overflow-y: scroll; scroll-snap-type: y mandatory; height: calc(100vh - 140px); }
-        
-        .reel-container {
-            width: 100%;
-            height: calc(100vh - 140px);
-            scroll-snap-align: start;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #000;
-        }
-        
-        .reel-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .reel-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-        }
-        
-        .reel-caption {
-            color: white;
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-        
-        .reel-creator {
-            color: #FF9933;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .reel-stats {
-            color: #ccc;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-        
-        .reel-actions {
-            position: absolute;
-            right: 15px;
-            bottom: 100px;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            align-items: center;
-        }
-        
-        .action-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .action-count {
-            font-size: 11px;
-            margin-top: 5px;
-            color: #ccc;
-        }
-        
-        .block-btn {
-            color: #ff3333;
-        }
-        
-        /* ============ ADMIN CONTROL PANEL ============ */
-        #admin-panel {
-            display: none;
-            position: fixed;
-            top: 60px;
-            right: 0;
-            width: 300px;
-            height: calc(100vh - 120px);
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            padding: 20px;
-            border-left: 2px solid #FF9933;
-            overflow-y: auto;
-        }
-        
-        .admin-header {
-            color: #FF9933;
-            font-size: 18px;
-            margin-bottom: 20px;
-            text-align: center;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-        
-        .user-card {
-            background: rgba(255,255,255,0.1);
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        /* ============ OWNER SECRET PANEL ============ */
-        #owner-panel {
-            display: none;
-            position: fixed;
-            top: 60px;
-            left: 0;
-            width: 300px;
-            height: calc(100vh - 120px);
-            background: rgba(0,0,0,0.98);
-            z-index: 2001;
-            padding: 20px;
-            border-right: 2px solid #128807;
-        }
-        
-        .owner-secret {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            width: 30px;
-            height: 30px;
-            background: #FF9933;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 1001;
-            opacity: 0.3;
-        }
-        
-        .owner-secret:hover {
-            opacity: 1;
-        }
+        /* --- 2. MAIN WEBSITE UI --- */
+        #main-site { display: none; }
+        header { background: var(--primary); color: white; padding: 30px 20px; text-align: center; border-bottom: 5px solid var(--secondary); }
+        nav { background: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        nav a { margin: 0 15px; text-decoration: none; color: var(--primary); font-weight: bold; cursor: pointer; }
 
-        /* ============ AI ASSISTANT CHAT WIDGET ============ */
-        #ai-chat-button {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #FF9933, #128807);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            border: 2px solid white;
-            transition: transform 0.2s;
-        }
-        #ai-chat-button:hover {
-            transform: scale(1.1);
-        }
-        #ai-chat-button i {
-            font-size: 28px;
-            color: white;
-        }
-        #ai-chat-container {
-            position: fixed;
-            bottom: 150px;
-            right: 20px;
-            width: 320px;
-            height: 450px;
-            background: #1a1a1a;
-            border-radius: 20px;
-            border: 1px solid #FF9933;
-            display: none;
-            flex-direction: column;
-            z-index: 10001;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-        }
-        .ai-header {
-            background: #111;
-            padding: 15px;
-            border-bottom: 1px solid #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #FF9933;
-        }
-        .ai-header span {
-            font-weight: bold;
-        }
-        .ai-close {
-            cursor: pointer;
-            font-size: 18px;
-            color: #888;
-        }
-        .ai-close:hover {
-            color: #fff;
-        }
-        .ai-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .ai-message {
-            max-width: 80%;
-            padding: 10px 12px;
-            border-radius: 18px;
-            word-wrap: break-word;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-        .user-message {
-            align-self: flex-end;
-            background: #FF9933;
-            color: #000;
-            border-bottom-right-radius: 4px;
-        }
-        .bot-message {
-            align-self: flex-start;
-            background: #333;
-            color: #fff;
-            border-bottom-left-radius: 4px;
-        }
-        .ai-typing {
-            align-self: flex-start;
-            background: #333;
-            color: #aaa;
-            padding: 10px 15px;
-            border-radius: 18px;
-            font-style: italic;
-            display: none;
-        }
-        .ai-input-area {
-            display: flex;
-            padding: 12px;
-            border-top: 1px solid #333;
-            background: #111;
-        }
-        .ai-input-area input {
-            flex: 1;
-            background: #222;
-            border: 1px solid #444;
-            color: white;
-            padding: 10px 12px;
-            border-radius: 30px;
-            outline: none;
-            font-size: 13px;
-        }
-        .ai-input-area button {
-            background: #FF9933;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-left: 8px;
-            color: #000;
-            cursor: pointer;
-            font-size: 16px;
-        }
+        .container { padding: 40px 20px; max-width: 1200px; margin: auto; }
+        h2 { color: var(--primary); border-bottom: 3px solid var(--secondary); display: inline-block; padding-bottom: 5px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 4px solid var(--primary); }
+
+        .teacher-list { columns: 2; list-style: none; padding: 0; }
+        .teacher-list li { margin-bottom: 8px; font-size: 0.9em; border-left: 3px solid var(--secondary); padding-left: 10px; }
+
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+        .gallery-item img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
+
+        .map-container { width: 100%; border-radius: 15px; overflow: hidden; margin-top: 15px; border: 2px solid #ddd; }
+
+        /* Admin Section */
+        #adminSection { display: none; background: #fffde7; padding: 20px; border: 2px dashed #f4b400; margin-top: 30px; border-radius: 10px; text-align: center; }
+        .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        
+        footer { background: var(--primary); color: white; text-align: center; padding: 30px; margin-top: 50px; }
+        #secretTrigger { color: transparent; cursor: default; user-select: none; }
     </style>
 </head>
 <body>
 
-    <!-- SECRET OWNER BUTTON (Only I know) -->
-    <div class="owner-secret" onclick="toggleOwnerPanel()" title="Owner Panel"></div>
-
-    <audio id="murali-sound" loop><source src="https://www.soundjay.com/misc/sounds/flute-1.mp3" type="audio/mpeg"></audio>
-
-    <!-- SPLASH SCREEN -->
     <div id="start-overlay">
         <div class="splash-content">
-            <h1 style="color: #FF9933; font-size: 28px; margin-bottom: 20px; letter-spacing: 4px; font-weight: bold; animation: fadeInDown 1s;">WELCOME</h1>
-            <div style="width: 160px; height: 160px; margin: 0 auto; border: 3px solid #FF9933; border-radius: 50%; padding: 5px; background: #fff; box-shadow: 0 0 25px rgba(255,153,51,0.4); animation: zoomIn 1.2s;">
-                <img src="https://i.ibb.co/MDPQPPMT/IMG-20251127-WA0069.jpg" alt="DIC Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
+            <h1 style="color: var(--tiranga-orange); letter-spacing: 5px;">WELCOME</h1>
+            <div style="width: 160px; height: 160px; margin: 0 auto; border: 3px solid #FF9933; border-radius: 50%; padding: 5px; background: #fff; animation: zoomIn 1.2s;">
+                <img src="https://i.ibb.co/MDPQPPMT/IMG-20251127-WA0069.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
             </div>
-            <h2 style="color: white; margin-top: 20px; font-size: 19px; line-height: 1.4; animation: fadeInUp 1.5s;">
-                DILESHWARI INTER COLLEGE<br>
-                <span style="color: #128807; font-size: 15px; letter-spacing: 1px;">RUDHAULI, BASTI</span>
-            </h2>
-            <div style="margin-top: 40px; animation: fadeIn 2s;">
-                <div style="width: 70px; height: 70px; margin: 0 auto 10px; border: 2px solid #128807; border-radius: 50%; overflow: hidden; background: #222;">
-                    <img src="https://i.ibb.co/cSjYLkmM/1766300930883.png" alt="Developer" style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <p style="color: #888; font-size: 11px; margin: 0; text-transform: uppercase;">Developed by</p>
-                <h3 style="color: #FF9933; margin: 2px 0; font-size: 16px;">SURAJ MAURYA</h3>
-                <p style="color: #666; font-size: 10px; margin-top: 5px;">Full Control Access</p>
-            </div>
-            <div style="width: 200px; height: 4px; background: #222; margin: 25px auto 0; border-radius: 10px; overflow: hidden;">
-                <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #FF9933, #fff, #128807); animation: loadProgress 5s linear forwards;"></div>
+            <h2 style="margin-top: 20px;">DILESHWARI INTER COLLEGE</h2>
+            <p style="color: var(--tiranga-green);">RUDHAULI, BASTI</p>
+            <p style="color: #666; font-size: 11px;">Developed by SURAJ MAURYA</p>
+            <div style="width: 200px; height: 4px; background: #222; margin: 25px auto; border-radius: 10px; overflow: hidden;">
+                <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #FF9933, #fff, #128807); animation: loadProgress 3s linear forwards;"></div>
             </div>
         </div>
     </div>
 
-    <!-- LOGIN SCREEN -->
-    <div id="auth-screen">
-        <div class="auth-card">
-            <h2 style="text-align:center; color:var(--primary); margin-top:0;">DIC Portal Login</h2>
-            <label style="font-size:12px;">Select Your Role:</label>
-            <select id="user-role">
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-                <option value="principal">Principal</option>
-                <option value="parent">Parent</option>
-                <option value="owner" style="color:red; font-weight:bold;">Suraj Maurya (Owner)</option>
-            </select>
-            <input type="text" id="l-user" placeholder="Username / ID">
-            <input type="password" id="l-pass" placeholder="Password">
-            <button class="btn-main" onclick="doLogin()">Login to DIC Portal</button>
-            <p style="text-align:center; font-size:11px; color:#666; margin-top:15px;">Everyone can use, but full control with owner</p>
-        </div>
-    </div>
+    <div id="main-site">
+        <header>
+            <h1>दिलेश्वरी इण्टर कॉलेज</h1>
+            <p>रुधौली - बस्ती, उत्तर प्रदेश | सत्र 2026-27 प्रवेश प्रारम्भ</p>
+        </header>
 
-    <!-- MAIN APP -->
-    <div id="main-app">
-        <div class="app-header">
-            <i class="fa-solid fa-bars" onclick="toggleAdminPanel()" title="Admin Panel"></i>
-            <div style="flex:1; margin: 0 15px; background:#222; border-radius:20px; padding:5px 15px;">
-                <input type="text" placeholder="Search Teachers, Notes..." style="background:transparent; border:none; color:white; width:100%; outline:none;">
-            </div>
-            <i class="fa-solid fa-user-secret" style="color:var(--tiranga-orange);" onclick="showMyProfile()" title="Your Profile"></i>
-        </div>
-
-        <!-- HOME PAGE -->
-        <div id="home" class="page active-page">
-            <div id="user-welcome" style="background:white; color:#000; padding:15px; border-radius:15px; border-left:5px solid var(--tiranga-orange); margin-bottom:15px;">
-                <b>Jai Hind!</b> Welcome to DIC.
-            </div>
-
-            <div class="timing-card">
-                <i class="fa-solid fa-clock" style="color:var(--tiranga-orange); font-size:24px;"></i>
-                <div>
-                    <small style="color:gray;">School Timing:</small>
-                    <div id="current-school-time" style="font-weight:bold;">09:00 AM - 03:00 PM</div>
-                </div>
-            </div>
-
-            <div class="notice-box">
-                <h4 style="margin:0; color:var(--tiranga-green);"><i class="fa-solid fa-bullhorn"></i> Important Notice</h4>
-                <p id="display-notice" style="margin:5px 0 0; font-size:14px; font-weight:500;">Welcome to the digital portal of DIC Rudhauli.</p>
-            </div>
-
-            <!-- Quick Access Buttons -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
-                <div style="background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer;" onclick="nav(document.querySelector('.nav-item:nth-child(3)'), 'reels')">
-                    <i class="fa-solid fa-video" style="color: #FF9933; font-size: 24px; margin-bottom: 10px;"></i>
-                    <div style="font-size: 14px;">Watch Reels</div>
-                </div>
-                <div style="background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer;" onclick="nav(document.querySelector('.nav-item:nth-child(5)'), 'study')">
-                    <i class="fa-solid fa-graduation-cap" style="color: #128807; font-size: 24px; margin-bottom: 10px;"></i>
-                    <div style="font-size: 14px;">Study Materials</div>
-                </div>
-            </div>
-
-            <!-- Principal Panel (Hidden by default) -->
-            <div id="principal-panel" style="display:none; background:#1a1a1a; padding:15px; border-radius:15px; margin-top:20px; border:1px dashed #555;">
-                <h4 style="margin-top:0; color:white;"><i class="fa-solid fa-user-tie"></i> Principal Desk</h4>
-                <input type="text" id="new-school-time" placeholder="Update School Timing" style="background:#222; color:white;">
-                <textarea id="new-notice" placeholder="Update Notice Board" style="width:100%; background:#222; color:white; border-radius:10px; padding:10px; border:1px solid #444; margin-top:10px;"></textarea>
-                <button class="btn-main" onclick="updatePortal()">Update Portal</button>
-            </div>
-        </div>
-
-        <!-- REELS PAGE -->
-        <div id="reels" class="page">
-            <div id="reels-page">
-                <!-- Reels will be loaded here dynamically -->
-            </div>
-            
-            <!-- Upload Reel Button (Only for teachers/owner) -->
-            <div id="upload-reel-btn" style="position: fixed; bottom: 80px; right: 20px; background: #FF9933; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; box-shadow: 0 4px 15px rgba(255,153,51,0.4);" onclick="uploadReel()">
-                <i class="fa-solid fa-plus" style="color: white; font-size: 20px;"></i>
-            </div>
-        </div>
-
-        <!-- STUDY PAGE -->
-        <div id="study" class="page">
-            <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-book"></i> Study Materials</h3>
-            
-            <div style="background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
-                <h4 style="color: #FF9933; margin-top: 0;">📚 Available Subjects</h4>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
-                    <div style="background: #222; padding: 10px; border-radius: 10px; text-align: center;">
-                        <i class="fa-solid fa-atom" style="color: #4CAF50;"></i> Science
-                    </div>
-                    <div style="background: #222; padding: 10px; border-radius: 10px; text-align: center;">
-                        <i class="fa-solid fa-calculator" style="color: #2196F3;"></i> Maths
-                    </div>
-                    <div style="background: #222; padding: 10px; border-radius: 10px; text-align: center;">
-                        <i class="fa-solid fa-laptop-code" style="color: #FF9800;"></i> Computer
-                    </div>
-                    <div style="background: #222; padding: 10px; border-radius: 10px; text-align: center;">
-                        <i class="fa-solid fa-language" style="color: #E91E63;"></i> English
-                    </div>
-                </div>
-            </div>
-            
-            <button class="btn-main" onclick="alert('PDF will download...')">
-                <i class="fa-solid fa-download"></i> Download All Notes
-            </button>
-        </div>
-
-        <!-- PROFILE PAGE -->
-        <div id="profile" class="page">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(45deg, #FF9933, #128807); padding: 3px; margin: 0 auto 15px;">
-                    <img id="profile-pic" src="https://i.ibb.co/cSjYLkmM/1766300930883.png" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-                </div>
-                <h3 id="profile-name">User Name</h3>
-                <p id="profile-role" style="color: #FF9933; font-size: 14px;">Student</p>
-            </div>
-            
-            <div style="background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
-                <h4 style="margin-top: 0;">📊 Your Stats</h4>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; text-align: center;">
-                    <div>
-                        <div style="font-size: 20px; font-weight: bold;" id="stats-reels">0</div>
-                        <div style="font-size: 12px; color: #888;">Reels</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 20px; font-weight: bold;" id="stats-views">0</div>
-                        <div style="font-size: 12px; color: #888;">Views</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 20px; font-weight: bold;" id="stats-likes">0</div>
-                        <div style="font-size: 12px; color: #888;">Likes</div>
-                    </div>
-                </div>
-            </div>
-            
-            <button class="btn-main" onclick="logout()">
-                <i class="fa-solid fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
-
-        <!-- ADMIN CONTROL PANEL -->
-        <div id="admin-panel">
-            <div class="admin-header">
-                <i class="fa-solid fa-crown"></i> Admin Control
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <h4 style="color: white; font-size: 14px; margin-bottom: 10px;">👥 Active Users</h4>
-                <div id="users-list">
-                    <!-- Users will be loaded here -->
-                </div>
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <h4 style="color: white; font-size: 14px; margin-bottom: 10px;">📊 System Stats</h4>
-                <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px;">
-                    <div>Total Users: <span id="total-users">0</span></div>
-                    <div>Total Reels: <span id="total-reels-admin">0</span></div>
-                    <div>Total Views: <span id="total-views-admin">0</span></div>
-                </div>
-            </div>
-            
-            <button class="btn-main" style="background: #ff3333;" onclick="clearAllData()">
-                <i class="fa-solid fa-trash"></i> Clear All Data
-            </button>
-            
-            <button class="btn-main" style="background: #333; margin-top: 10px;" onclick="toggleAdminPanel()">
-                Close Panel
-            </button>
-        </div>
-
-        <!-- OWNER SECRET PANEL -->
-        <div id="owner-panel">
-            <div class="admin-header" style="color: #128807;">
-                <i class="fa-solid fa-user-secret"></i> Owner Control
-                <p style="font-size: 12px; color: #FF9933; margin: 5px 0 0;">Suraj Maurya</p>
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <h4 style="color: white; font-size: 14px; margin-bottom: 10px;">🔐 Master Controls</h4>
-                <div style="background: rgba(18,136,7,0.2); padding: 10px; border-radius: 10px;">
-                    <p style="font-size: 12px; color: #ccc;">You have full control over everything</p>
-                </div>
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <h4 style="color: white; font-size: 14px; margin-bottom: 10px;">📁 Export All Data</h4>
-                <button class="btn-main" style="background: #128807;" onclick="exportAllData()">
-                    <i class="fa-solid fa-download"></i> Download Data
-                </button>
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <h4 style="color: white; font-size: 14px; margin-bottom: 10px;">🚨 Danger Zone</h4>
-                <button class="btn-main" style="background: #ff3333;" onclick="resetEverything()">
-                    <i class="fa-solid fa-bomb"></i> Reset Everything
-                </button>
-            </div>
-            
-            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
-                <p style="font-size: 11px; color: #666; text-align: center;">
-                    This panel is only visible to Suraj Maurya
-                </p>
-            </div>
-        </div>
-
-        <!-- BOTTOM NAVIGATION -->
         <nav>
-            <div class="nav-item active" onclick="nav(this,'home')"><i class="fa-solid fa-house"></i><span>Home</span></div>
-            <div class="nav-item"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></div>
-            <div class="nav-item"><i class="fa-solid fa-video"></i><span>Reels</span></div>
-            <div class="nav-item"><i class="fa-solid fa-film"></i><span>Videos</span></div>
-            <div class="nav-item" onclick="nav(this,'study')"><i class="fa-solid fa-graduation-cap"></i><span>Study</span></div>
-            <div class="nav-item" onclick="nav(this,'profile')"><i class="fa-solid fa-user"></i><span>Profile</span></div>
+            <a href="#about">परिचय</a>
+            <a href="#teachers">शिक्षक</a>
+            <a href="#gallery">गैलरी</a>
+            <a href="#contact">सम्पर्क</a>
         </nav>
-    </div>
 
-    <!-- AI ASSISTANT CHAT WIDGET -->
-    <div id="ai-chat-button" onclick="toggleAIChat()">
-        <i class="fa-solid fa-robot"></i>
-    </div>
-    <div id="ai-chat-container">
-        <div class="ai-header">
-            <span><i class="fa-solid fa-sparkles"></i> DIC AI (Gemini-like)</span>
-            <span class="ai-close" onclick="toggleAIChat()">✕</span>
+        <div class="container">
+            <section id="about">
+                <h2>हमारे मार्गदर्शक</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>श्री शान्तनु सिंह</h3>
+                        <p><strong>प्रबन्धक</strong></p>
+                    </div>
+                    <div class="card">
+                        <h3>डॉ. अरुण कुमार मिश्र</h3>
+                        <p><strong>प्रधानाचार्य</strong> (9919541500)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="teachers">
+                <h2>अनु अनुभवी शिक्षक गण</h2>
+                <div class="card">
+                    <ul class="teacher-list">
+                        <li>श्री राम अजोर (प्रवक्ता) - अर्थशास्त्र</li>
+                        <li>श्री रवीन्द्र कुमार - संस्कृत</li>
+                        <li>श्री अखिलेश कुमार - हिन्दी</li>
+                        <li>श्री विनीत बहादुर सिंह - समाजशास्त्र</li>
+                        <li>श्री रितेश कुमार शुक्ला - भूगोल</li>
+                        <li>श्री पंकज देवराज - अंग्रेजी</li>
+                        <li>श्री स्वराज कुमार वर्मा - चित्रकला</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="gallery">
+                <h2>फोटो गैलरी</h2>
+                <div class="gallery" id="mainGallery">
+                    <div class="gallery-item"><img src="image_6.png"></div>
+                    <div class="gallery-item"><img src="image_11.png"></div>
+                </div>
+            </section>
+
+            <section id="contact">
+                <h2>सम्पर्क एवं स्थान</h2>
+                <div class="card">
+                    <p><b>पता:</b> रुधौली, बस्ती, उत्तर प्रदेश</p>
+                    <p><b>फोन:</b> 6386166791</p>
+                    <div class="map-container">
+                        <iframe src="https://maps.google.com/maps?q=rudhauli basti&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="300" style="border:0;"></iframe>
+                    </div>
+                </div>
+            </section>
+
+            <section id="adminSection">
+                <h3>Admin Panel: नई फोटो जोड़ें</h3>
+                <input type="file" id="fileUpload" accept="image/*">
+                <br><br>
+                <button class="btn" onclick="uploadMedia()">Upload Now</button>
+            </section>
         </div>
-        <div class="ai-messages" id="ai-messages">
-            <div class="ai-message bot-message">Namaste! I'm your DIC AI assistant. Ask me anything about the portal, school, or give commands like "open reels", "play music", etc.</div>
-        </div>
-        <div class="ai-typing" id="ai-typing">AI is thinking...</div>
-        <div class="ai-input-area">
-            <input type="text" id="ai-user-input" placeholder="Ask me..." onkeypress="if(event.key==='Enter') sendAIMessage()">
-            <button onclick="sendAIMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
+
+        <footer>
+            <p>&copy; 2026 दिलेश्वरी इण्टर कॉलेज | <span id="secretTrigger" onclick="activateAdmin()">Admin</span></p>
+        </footer>
     </div>
 
     <script>
-        // ============ GLOBAL VARIABLES ============
-        let currentUser = null;
-        let allUsers = [];
-        let allReels = [];
-        let isOwnerLoggedIn = false;
-
-        // ============ INITIALIZATION ============
-        window.addEventListener('load', function() {
-            // Load saved data
-            loadSavedData();
-            
-            // Auto login if previously logged in
-            const savedUser = localStorage.getItem('dic_current_user');
-            if (savedUser) {
-                try {
-                    currentUser = JSON.parse(savedUser);
-                    if (currentUser.email === 'suraj@dic.com') {
-                        isOwnerLoggedIn = true;
-                    }
-                } catch(e) {
-                    console.log('No saved user');
-                }
-            }
-            
-            // Start splash screen
+        // Splash Screen Logic
+        setTimeout(() => {
+            document.getElementById('start-overlay').style.opacity = '0';
             setTimeout(() => {
-                const splash = document.getElementById('start-overlay');
-                splash.style.opacity = '0';
-                splash.style.transform = 'scale(1.1)';
-                
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                    document.getElementById('auth-screen').style.display = 'flex';
-                }, 1000);
-            }, 5000);
-        });
+                document.getElementById('start-overlay').style.display = 'none';
+                document.getElementById('main-site').style.display = 'block';
+            }, 1000);
+        }, 3000);
 
-        // ============ LOGIN SYSTEM ============
-        function doLogin() {
-            const role = document.getElementById('user-role').value;
-            const user = document.getElementById('l-user').value || "User";
-            const pass = document.getElementById('l-pass').value;
-            
-            // Special owner login
-            if (role === 'owner' && user === 'suraj' && pass === 'suraj123') {
-                isOwnerLoggedIn = true;
-                currentUser = {
-                    name: "Suraj Maurya",
-                    email: "suraj@dic.com",
-                    role: "owner",
-                    loginTime: new Date().toISOString(),
-                    ip: "192.168.1.1"
-                };
-            } else {
-                isOwnerLoggedIn = false;
-                currentUser = {
-                    name: user,
-                    email: user.toLowerCase() + "@dic.com",
-                    role: role,
-                    loginTime: new Date().toISOString(),
-                    ip: "192.168.1." + Math.floor(Math.random() * 255)
-                };
-            }
-            
-            // Save user
-            localStorage.setItem('dic_current_user', JSON.stringify(currentUser));
-            
-            // Add to all users if not exists
-            const userExists = allUsers.find(u => u.email === currentUser.email);
-            if (!userExists) {
-                allUsers.push({
-                    ...currentUser,
-                    id: Date.now(),
-                    status: 'active'
-                });
-                localStorage.setItem('dic_all_users', JSON.stringify(allUsers));
-            }
-            
-            // Play login sound
-            const sound = document.getElementById('murali-sound');
-            sound.play().catch(() => console.log("Sound interaction needed"));
-            
-            // Show main app
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            
-            // Update welcome message
-            document.getElementById('user-welcome').innerHTML = `
-                <b>Jai Hind, ${currentUser.name}!</b><br>
-                Logged in as: <span style="color:var(--tiranga-orange)">${currentUser.role.toUpperCase()}</span>
-            `;
-            
-            // Update profile
-            document.getElementById('profile-name').textContent = currentUser.name;
-            document.getElementById('profile-role').textContent = currentUser.role.toUpperCase();
-            
-            // Show/hide panels based on role
-            if(currentUser.role === 'principal' || currentUser.role === 'owner') {
-                document.getElementById('principal-panel').style.display = 'block';
-                document.getElementById('upload-reel-btn').style.display = 'flex';
-            }
-            
-            // Load reels
-            loadReels();
-            
-            // Update stats
-            updateStats();
-        }
-
-        // ============ NAVIGATION ============
-        function nav(el, id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active-page');
-            el.classList.add('active');
-            
-            // Special handling for reels page
-            if (id === 'reels') {
-                loadReels();
-            }
-            
-            // Close admin panel
-            document.getElementById('admin-panel').style.display = 'none';
-            document.getElementById('owner-panel').style.display = 'none';
-        }
-
-        // ============ REELS SYSTEM ============
-        function loadReels() {
-            const reelsContainer = document.getElementById('reels-page');
-            reelsContainer.innerHTML = '';
-            
-            // Sample reels data
-            const sampleReels = [
-                {
-                    id: 1,
-                    video: "https://assets.mixkit.co/videos/preview/mixkit-close-up-of-computer-algorithm-processing-50172-large.mp4",
-                    caption: "Learn Bubble Sort Algorithm with visualization",
-                    creator: "Suraj Maurya",
-                    likes: 245,
-                    views: 1542,
-                    comments: 23,
-                    timestamp: "2 hours ago"
-                },
-                {
-                    id: 2,
-                    video: "https://assets.mixkit.co/videos/preview/mixkit-programmer-working-on-code-50207-large.mp4",
-                    caption: "Binary Search explained in simple terms",
-                    creator: "Suraj Maurya",
-                    likes: 189,
-                    views: 987,
-                    comments: 15,
-                    timestamp: "1 day ago"
-                },
-                {
-                    id: 3,
-                    video: "https://assets.mixkit.co/videos/preview/mixkit-hacker-trying-to-get-into-a-system-29875-large.mp4",
-                    caption: "Quick Sort Algorithm tutorial",
-                    creator: "Suraj Maurya",
-                    likes: 312,
-                    views: 2105,
-                    comments: 31,
-                    timestamp: "3 days ago"
-                }
-            ];
-            
-            // Add loaded reels
-            sampleReels.forEach(reel => {
-                const reelElement = document.createElement('div');
-                reelElement.className = 'reel-container';
-                reelElement.innerHTML = `
-                    <video class="reel-video" autoplay muted loop>
-                        <source src="${reel.video}" type="video/mp4">
-                    </video>
-                    
-                    <div class="reel-overlay">
-                        <div class="reel-caption">${reel.caption}</div>
-                        <div class="reel-creator">${reel.creator}</div>
-                        <div class="reel-stats">
-                            ${reel.views.toLocaleString()} views • ${reel.timestamp}
-                        </div>
-                    </div>
-                    
-                    <div class="reel-actions">
-                        <button class="action-btn" onclick="likeReel(${reel.id})">
-                            <i class="fa-solid fa-heart"></i>
-                            <div class="action-count">${reel.likes.toLocaleString()}</div>
-                        </button>
-                        
-                        <button class="action-btn" onclick="commentReel(${reel.id})">
-                            <i class="fa-solid fa-comment"></i>
-                            <div class="action-count">${reel.comments}</div>
-                        </button>
-                        
-                        <button class="action-btn" onclick="shareReel(${reel.id})">
-                            <i class="fa-solid fa-share"></i>
-                            <div class="action-count">Share</div>
-                        </button>
-                        
-                        ${isOwnerLoggedIn ? `
-                        <button class="action-btn block-btn" onclick="deleteReel(${reel.id})" title="Delete Reel">
-                            <i class="fa-solid fa-trash"></i>
-                            <div class="action-count">Delete</div>
-                        </button>
-                        ` : ''}
-                    </div>
-                `;
-                
-                // Click to pause/play
-                reelElement.addEventListener('click', function(e) {
-                    if (!e.target.closest('.reel-actions')) {
-                        const video = this.querySelector('video');
-                        if (video.paused) {
-                            video.play();
-                        } else {
-                            video.pause();
-                        }
-                    }
-                });
-                
-                reelsContainer.appendChild(reelElement);
-            });
-            
-            // Auto increment views
-            setInterval(() => {
-                if (Math.random() > 0.7) {
-                    const randomReel = sampleReels[Math.floor(Math.random() * sampleReels.length)];
-                    randomReel.views += Math.floor(Math.random() * 5) + 1;
-                    
-                    // Update display
-                    const viewsElement = reelsContainer.querySelector(`.reel-container:nth-child(${randomReel.id}) .reel-stats`);
-                    if (viewsElement) {
-                        viewsElement.innerHTML = `${randomReel.views.toLocaleString()} views • ${randomReel.timestamp}`;
-                    }
-                    
-                    // Update stats
-                    updateStats();
-                }
-            }, 3000);
-        }
-
-        function likeReel(reelId) {
-            alert('Liked reel!');
-            // Implement like logic here
-        }
-
-        function commentReel(reelId) {
-            const comment = prompt('Enter your comment:');
-            if (comment) {
-                alert('Comment added!');
+        // Admin Logic (5 taps on Admin text in footer)
+        let taps = 0;
+        function activateAdmin() {
+            taps++;
+            if(taps === 5) {
+                document.getElementById('adminSection').style.display = 'block';
+                document.getElementById('adminSection').scrollIntoView();
+                alert("डैशबोर्ड अनलॉक हो गया!");
             }
         }
 
-        function shareReel(reelId) {
-            alert('Reel shared! Views increased.');
-        }
-
-        function deleteReel(reelId) {
-            if (confirm('Are you sure you want to delete this reel?')) {
-                alert('Reel deleted! (Owner only)');
-            }
-        }
-
-        function uploadReel() {
-            if (!isOwnerLoggedIn && currentUser.role !== 'teacher') {
-                alert('Only teachers and owner can upload reels!');
-                return;
-            }
-            
-            const caption = prompt('Enter reel caption:');
-            if (caption) {
-                alert('Reel uploaded successfully!');
-                // Implement upload logic here
-            }
-        }
-
-        // ============ ADMIN PANEL ============
-        function toggleAdminPanel() {
-            const panel = document.getElementById('admin-panel');
-            if (panel.style.display === 'block') {
-                panel.style.display = 'none';
-            } else {
-                panel.style.display = 'block';
-                loadAdminData();
-            }
-        }
-
-        function toggleOwnerPanel() {
-            if (!isOwnerLoggedIn) {
-                alert('Only Suraj Maurya can access this panel!');
-                return;
-            }
-            
-            const panel = document.getElementById('owner-panel');
-            if (panel.style.display === 'block') {
-                panel.style.display = 'none';
-            } else {
-                panel.style.display = 'block';
-            }
-        }
-
-        function loadAdminData() {
-            // Load users
-            const usersList = document.getElementById('users-list');
-            usersList.innerHTML = '';
-            
-            allUsers.forEach(user => {
-                const userDiv = document.createElement('div');
-                userDiv.className = 'user-card';
-                userDiv.innerHTML = `
-                    <div>
-                        <div style="font-weight: bold;">${user.name}</div>
-                        <div style="font-size: 11px; color: #888;">${user.role} • ${user.email}</div>
-                    </div>
-                    <div>
-                        <button onclick="blockUser('${user.email}')" style="background: #ff3333; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 11px; cursor: pointer;">
-                            Block
-                        </button>
-                    </div>
-                `;
-                usersList.appendChild(userDiv);
-            });
-            
-            // Update stats
-            document.getElementById('total-users').textContent = allUsers.length;
-            document.getElementById('total-reels-admin').textContent = 3; // Hardcoded for now
-            document.getElementById('total-views-admin').textContent = '4,634';
-        }
-
-        function blockUser(email) {
-            if (email === 'suraj@dic.com') {
-                alert('Cannot block the owner!');
-                return;
-            }
-            
-            if (confirm(`Block user ${email}?`)) {
-                alert('User blocked successfully!');
-                // Implement block logic here
-            }
-        }
-
-        // ============ DATA MANAGEMENT ============
-        function loadSavedData() {
-            // Load users
-            const savedUsers = localStorage.getItem('dic_all_users');
-            if (savedUsers) {
-                allUsers = JSON.parse(savedUsers);
-            }
-            
-            // Load reels
-            const savedReels = localStorage.getItem('dic_reels');
-            if (savedReels) {
-                allReels = JSON.parse(savedReels);
-            }
-        }
-
-        function updateStats() {
-            // Update profile stats
-            document.getElementById('stats-reels').textContent = '3';
-            document.getElementById('stats-views').textContent = '4,634';
-            document.getElementById('stats-likes').textContent = '746';
-        }
-
-        function clearAllData() {
-            if (confirm('WARNING: This will clear all app data. Continue?')) {
-                localStorage.clear();
-                alert('All data cleared! Reloading...');
-                location.reload();
-            }
-        }
-
-        function exportAllData() {
-            if (!isOwnerLoggedIn) {
-                alert('Only owner can export data!');
-                return;
-            }
-            
-            const allData = {
-                users: allUsers,
-                reels: allReels,
-                currentUser: currentUser,
-                exportTime: new Date().toISOString(),
-                exportedBy: "Suraj Maurya"
-            };
-            
-            const dataStr = JSON.stringify(allData, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = `dic_portal_data_${Date.now()}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
-            alert('All data exported successfully!');
-        }
-
-        function resetEverything() {
-            if (!isOwnerLoggedIn) {
-                alert('Only owner can reset everything!');
-                return;
-            }
-            
-            if (confirm('🚨 NUCLEAR OPTION: This will reset EVERYTHING including all user data, reels, and settings. Continue?')) {
-                localStorage.clear();
-                alert('Everything reset! App will reload...');
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
-            }
-        }
-
-        // ============ OTHER FUNCTIONS ============
-        function updatePortal() {
-            const time = document.getElementById('new-school-time').value;
-            const note = document.getElementById('new-notice').value;
-            if(time) document.getElementById('current-school-time').innerText = time;
-            if(note) document.getElementById('display-notice').innerText = note;
-            alert("Portal Updated Successfully!");
-        }
-
-        function showMyProfile() {
-            nav(document.querySelector('.nav-item:nth-child(6)'), 'profile');
-        }
-
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('dic_current_user');
-                location.reload();
-            }
-        }
-
-        // ============ AUTO-SAVE & BACKUP ============
-        setInterval(() => {
-            if (isOwnerLoggedIn) {
-                // Auto backup every 5 minutes
-                const backup = {
-                    timestamp: new Date().toISOString(),
-                    data: {
-                        users: allUsers,
-                        reels: allReels
-                    }
-                };
-                localStorage.setItem('dic_backup_' + Date.now(), JSON.stringify(backup));
-            }
-        }, 300000); // 5 minutes
-
-        // ============ AI ASSISTANT FUNCTIONS ============
-        function toggleAIChat() {
-            const container = document.getElementById('ai-chat-container');
-            if (container.style.display === 'flex') {
-                container.style.display = 'none';
-            } else {
-                container.style.display = 'flex';
-            }
-        }
-
-        function sendAIMessage() {
-            const input = document.getElementById('ai-user-input');
-            const message = input.value.trim();
-            if (!message) return;
-
-            // Display user message
-            const messagesDiv = document.getElementById('ai-messages');
-            const userMsgDiv = document.createElement('div');
-            userMsgDiv.className = 'ai-message user-message';
-            userMsgDiv.textContent = message;
-            messagesDiv.appendChild(userMsgDiv);
-
-            input.value = '';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            // Show typing indicator
-            const typing = document.getElementById('ai-typing');
-            typing.style.display = 'block';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            // Simulate AI response after delay
-            setTimeout(() => {
-                typing.style.display = 'none';
-                const response = getAIResponse(message);
-                const botMsgDiv = document.createElement('div');
-                botMsgDiv.className = 'ai-message bot-message';
-                botMsgDiv.textContent = response.text;
-                messagesDiv.appendChild(botMsgDiv);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-                // Execute action if any
-                if (response.action) {
-                    response.action();
-                }
-            }, 800 + Math.random() * 700);
-        }
-
-        function getAIResponse(input) {
-            const lower = input.toLowerCase();
-            let text = '';
-            let action = null;
-
-            // Greetings
-            if (lower.includes('hello') || lower.includes('hi') || lower.includes('namaste')) {
-                text = `Namaste ${currentUser ? currentUser.name : 'User'}! How can I assist you today?`;
-            }
-            // Owner info
-            else if (lower.includes('owner') || lower.includes('suraj') || lower.includes('maurya')) {
-                text = 'Suraj Maurya is the developer and owner of this DIC Digital Portal. He has full control.';
-            }
-            // Reels
-            else if (lower.includes('reel') || lower.includes('video')) {
-                text = 'Opening reels page for you.';
-                action = () => nav(document.querySelector('.nav-item:nth-child(3)'), 'reels');
-            }
-            // Study
-            else if (lower.includes('study') || lower.includes('notes') || lower.includes('material')) {
-                text = 'Taking you to study materials.';
-                action = () => nav(document.querySelector('.nav-item:nth-child(5)'), 'study');
-            }
-            // Home
-            else if (lower.includes('home') || lower.includes('main')) {
-                text = 'Going to home page.';
-                action = () => nav(document.querySelector('.nav-item:nth-child(1)'), 'home');
-            }
-            // Profile
-            else if (lower.includes('profile') || lower.includes('my account')) {
-                text = 'Opening your profile.';
-                action = () => nav(document.querySelector('.nav-item:nth-child(6)'), 'profile');
-            }
-            // School timing
-            else if (lower.includes('time') || lower.includes('timing') || lower.includes('school time')) {
-                const timing = document.getElementById('current-school-time').innerText;
-                text = `Current school timing is: ${timing}`;
-            }
-            // Notice
-            else if (lower.includes('notice')) {
-                const notice = document.getElementById('display-notice').innerText;
-                text = `Important notice: ${notice}`;
-            }
-            // Play music
-            else if (lower.includes('play music') || lower.includes('flute') || lower.includes('murali')) {
-                const sound = document.getElementById('murali-sound');
-                sound.play();
-                text = 'Playing flute music (Murali).';
-            }
-            // Stop music
-            else if (lower.includes('stop music') || lower.includes('pause')) {
-                const sound = document.getElementById('murali-sound');
-                sound.pause();
-                text = 'Music stopped.';
-            }
-            // Help
-            else if (lower.includes('help') || lower.includes('what can you do')) {
-                text = 'I can: open pages (reels, study, home, profile), tell school timing/notice, play/stop flute music, give info about owner, and answer simple queries. Try asking!';
-            }
-            // Default
-            else {
-                const fallbacks = [
-                    "I'm not sure about that. Try asking for 'reels', 'study', 'timing', or 'help'.",
-                    "Hmm, I don't have an answer. You can ask me to open pages or check notices.",
-                    "I'm still learning. Could you rephrase? You can say 'help' for options."
-                ];
-                text = fallbacks[Math.floor(Math.random() * fallbacks.length)];
-            }
-
-            return { text, action };
+        function uploadMedia(){
+            const fileInput = document.getElementById("fileUpload");
+            const gallery = document.getElementById("mainGallery");
+            const file = fileInput.files[0];
+            if(!file) return alert("फोटो चुनें");
+            const url = URL.createObjectURL(file);
+            const div = document.createElement("div");
+            div.className = "gallery-item";
+            div.innerHTML = `<img src="${url}">`;
+            gallery.prepend(div);
+            fileInput.value = "";
         }
     </script>
 </body>
