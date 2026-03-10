@@ -12,11 +12,12 @@
             --secondary: #f4b400; 
             --tiranga-orange: #FF9933;
             --tiranga-green: #128807;
+            --accent: #ff4444;
             --text: #333; 
         }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; color: var(--text); overflow-x: hidden; }
 
-        /* --- 1. WELCOME SPLASH SCREEN (Opening Animation) --- */
+        /* --- 1. WELCOME SPLASH SCREEN --- */
         #start-overlay {
             position: fixed; inset: 0; background: #000; color: white;
             display: flex; align-items: center; justify-content: center;
@@ -27,27 +28,54 @@
         @keyframes loadProgress { from { width: 0%; } to { width: 100%; } }
         @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* --- 2. MAIN WEBSITE UI --- */
+        /* --- 2. SIDEBAR NAVIGATION --- */
+        #mySidebar {
+            height: 100%; width: 0; position: fixed; z-index: 2000;
+            top: 0; left: 0; background-color: var(--primary);
+            overflow-x: hidden; transition: 0.5s; padding-top: 60px;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+        }
+        #mySidebar a {
+            padding: 15px 25px; text-decoration: none; font-size: 18px;
+            color: #ddd; display: block; transition: 0.3s;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        #mySidebar a:hover { color: var(--secondary); background: rgba(255,255,255,0.05); }
+        #mySidebar .closebtn { position: absolute; top: 10px; right: 25px; font-size: 36px; color: white; cursor: pointer; }
+
+        .badge-new {
+            background: var(--accent); color: white; font-size: 10px;
+            padding: 2px 6px; border-radius: 10px; margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* --- 3. MAIN UI --- */
         #main-site { display: none; }
-        header { background: var(--primary); color: white; padding: 30px 20px; text-align: center; border-bottom: 5px solid var(--secondary); }
-        nav { background: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        nav a { margin: 0 15px; text-decoration: none; color: var(--primary); font-weight: bold; cursor: pointer; }
+        header { background: var(--primary); color: white; padding: 40px 20px; text-align: center; border-bottom: 5px solid var(--secondary); }
+        
+        .menu-trigger {
+            position: fixed; top: 15px; left: 15px; font-size: 24px;
+            background: var(--secondary); color: var(--primary);
+            padding: 8px 12px; border-radius: 5px; cursor: pointer; z-index: 1500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
 
         .container { padding: 40px 20px; max-width: 1200px; margin: auto; }
-        h2 { color: var(--primary); border-bottom: 3px solid var(--secondary); display: inline-block; padding-bottom: 5px; }
+        h2 { color: var(--primary); border-bottom: 3px solid var(--secondary); display: inline-block; padding-bottom: 5px; margin-bottom: 25px; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 4px solid var(--primary); }
+        /* Teacher Cards */
+        .teacher-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .teacher-item { background: white; padding: 15px; border-left: 5px solid var(--secondary); border-radius: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .t-name { font-weight: bold; color: var(--primary); font-size: 1.1em; display: block; }
+        .t-rank { font-size: 0.8em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .t-sub { font-size: 0.9em; margin-top: 5px; color: #444; }
 
-        .teacher-list { columns: 2; list-style: none; padding: 0; }
-        .teacher-list li { margin-bottom: 8px; font-size: 0.9em; border-left: 3px solid var(--secondary); padding-left: 10px; }
+        /* Notice Scroller */
+        .news-ticker { background: #eee; padding: 10px; overflow: hidden; white-space: nowrap; border-bottom: 1px solid #ddd; }
+        .news-ticker span { display: inline-block; animation: scrollText 15s linear infinite; color: var(--accent); font-weight: bold; }
+        @keyframes scrollText { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
 
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
-        .gallery-item img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
-
-        .map-container { width: 100%; border-radius: 15px; overflow: hidden; margin-top: 15px; border: 2px solid #ddd; }
-
-        /* Admin Section */
         #adminSection { display: none; background: #fffde7; padding: 20px; border: 2px dashed #f4b400; margin-top: 30px; border-radius: 10px; text-align: center; }
         .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; }
         
@@ -60,8 +88,8 @@
     <div id="start-overlay">
         <div class="splash-content">
             <h1 style="color: var(--tiranga-orange); letter-spacing: 5px;">WELCOME</h1>
-            <div style="width: 160px; height: 160px; margin: 0 auto; border: 3px solid #FF9933; border-radius: 50%; padding: 5px; background: #fff; animation: zoomIn 1.2s;">
-                <img src="https://i.ibb.co/MDPQPPMT/IMG-20251127-WA0069.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
+            <div style="width: 160px; height: 160px; margin: 0 auto; border: 3px solid #FF9933; border-radius: 50%; padding: 5px; background: #fff; animation: zoomIn 1.2s; overflow: hidden;">
+                <img src="https://i.ibb.co/hFHYTF7n/IMG-20251127-WA0069.jpg" alt="DIC Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
             </div>
             <h2 style="margin-top: 20px;">DILESHWARI INTER COLLEGE</h2>
             <p style="color: var(--tiranga-green);">RUDHAULI, BASTI</p>
@@ -72,83 +100,77 @@
         </div>
     </div>
 
+    <div id="mySidebar">
+        <span class="closebtn" onclick="closeNav()">×</span>
+        <a href="index.html"><i class="fa fa-home"></i> होम</a>
+        <a href="about.html"><i class="fa fa-university"></i> विद्यालय परिचय</a>
+        <a href="admission.html"><i class="fa fa-file-signature"></i> प्रवेश 2026 <span class="badge-new">नूतन</span></a>
+        <a href="subject.html"><i class="fa fa-book"></i> विषय एवं वर्ग</a>
+        <a href="facilities.html"><i class="fa fa-flask"></i> प्रयोगशाला/सुविधाएं</a>
+        <a href="gallary.html"><i class="fa fa-images"></i> गैलरी</a>
+        <a href="contact.html"><i class="fa fa-headset"></i> सहायता केंद्र</a>
+    </div>
+
     <div id="main-site">
+        <div class="menu-trigger" onclick="openNav()">☰</div>
+        
         <header>
             <h1>दिलेश्वरी इण्टर कॉलेज</h1>
-            <p>रुधौली - बस्ती, उत्तर प्रदेश | सत्र 2026-27 प्रवेश प्रारम्भ</p>
+            <p>रुधौली - बस्ती | विद्यालय कोड: 711103</p>
         </header>
 
-        <nav>
-            <a href="#about">परिचय</a>
-            <a href="#teachers">शिक्षक</a>
-            <a href="#gallery">गैलरी</a>
-            <a href="#contact">सम्पर्क</a>
-        </nav>
+        <div class="news-ticker">
+            <span>📢 सत्र 2026-27 के लिए नए प्रवेश प्रारम्भ हो चुके हैं। अधिक जानकारी के लिए ऑफिस से संपर्क करें।</span>
+        </div>
 
         <div class="container">
-            <section id="about">
-                <h2>हमारे मार्गदर्शक</h2>
-                <div class="grid">
-                    <div class="card">
-                        <h3>श्री शान्तनु सिंह</h3>
-                        <p><strong>प्रबन्धक</strong></p>
+            <section id="guides">
+                <h2>प्रशासनिक ढांचा</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div class="teacher-item" style="border-left-color: var(--tiranga-orange);">
+                        <span class="t-name">श्री शान्तनु सिंह</span>
+                        <span class="t-rank">प्रबन्धक</span>
                     </div>
-                    <div class="card">
-                        <h3>डॉ. अरुण कुमार मिश्र</h3>
-                        <p><strong>प्रधानाचार्य</strong> (9919541500)</p>
+                    <div class="teacher-item" style="border-left-color: var(--tiranga-green);">
+                        <span class="t-name">डॉ. अरुण कुमार</span>
+                        <span class="t-rank">प्रधानाचार्य (प्रवक्ता - अंग्रेजी)</span>
+                        <div class="t-sub">संपर्क: 9919541500</div>
                     </div>
                 </div>
             </section>
 
-            <section id="teachers">
-                <h2>अनु अनुभवी शिक्षक गण</h2>
-                <div class="card">
-                    <ul class="teacher-list">
-                        <li>श्री राम अजोर (प्रवक्ता) - अर्थशास्त्र</li>
-                        <li>श्री रवीन्द्र कुमार - संस्कृत</li>
-                        <li>श्री अखिलेश कुमार - हिन्दी</li>
-                        <li>श्री विनीत बहादुर सिंह - समाजशास्त्र</li>
-                        <li>श्री रितेश कुमार शुक्ला - भूगोल</li>
-                        <li>श्री पंकज देवराज - अंग्रेजी</li>
-                        <li>श्री स्वराज कुमार वर्मा - चित्रकला</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section id="gallery">
-                <h2>फोटो गैलरी</h2>
-                <div class="gallery" id="mainGallery">
-                    <div class="gallery-item"><img src="image_6.png"></div>
-                    <div class="gallery-item"><img src="image_11.png"></div>
-                </div>
-            </section>
-
-            <section id="contact">
-                <h2>सम्पर्क एवं स्थान</h2>
-                <div class="card">
-                    <p><b>पता:</b> रुधौली, बस्ती, उत्तर प्रदेश</p>
-                    <p><b>फोन:</b> 6386166791</p>
-                    <div class="map-container">
-                        <iframe src="https://maps.google.com/maps?q=rudhauli basti&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="300" style="border:0;"></iframe>
+            <section id="teachers" style="margin-top: 40px;">
+                <h2>शिक्षक विवरण (Pehchan Portal)</h2>
+                <div class="teacher-grid">
+                    <div class="teacher-item"><span class="t-name">Dr. SACHCHIDANAND PANDEY</span><span class="t-rank">Lecturer</span><div class="t-sub">Hindi (Inter)</div></div>
+                    <div class="teacher-item"><span class="t-name">RAM ASHISH</span><span class="t-rank">Lecturer</span><div class="t-sub">Economics (Inter)</div></div>
+                    <div class="teacher-item"><span class="t-name">BALWANT SINGH</span><span class="t-rank">Lecturer</span><div class="t-sub">Education (Inter)</div></div>
+                    <div class="teacher-item"><span class="t-name">Dr. RAVISH KUMAR</span><span class="t-rank">Lecturer</span><div class="t-sub">Sanskrit (Inter)</div></div>
+                    <div class="teacher-item"><span class="t-name">ANOOP KUMAR SINGH</span><span class="t-rank">Lecturer</span><div class="t-sub">Civics (Inter)</div></div>
+                    <div class="teacher-item"><span class="t-name">DINESH KUMAR</span><span class="t-rank">Lecturer</span><div class="t-sub">History (Inter)</div></div>
+                    <div class="teacher-item"><span class="t-name">PRADEEP KUMAR</span><span class="t-rank">Asst. Teacher</span><div class="t-sub">Hindi (High School)</div></div>
+                    <div class="teacher-item"><span class="t-name">DEEPAK SINGH PREMI</span><span class="t-rank">Asst. Teacher</span><div class="t-sub">Mathematics (High School)</div></div>
+                    <div class="teacher-item"><span class="t-name">VIJAY NATH TIWARI</span><span class="t-rank">Asst. Teacher</span><div class="t-sub">Science (High School)</div></div>
+                    <div class="teacher-item"><span class="t-name">RAJNEESH KUMAR VERMA</span><span class="t-rank">Asst. Teacher</span><div class="t-sub">Drawing (High School)</div></div>
                     </div>
-                </div>
             </section>
 
             <section id="adminSection">
-                <h3>Admin Panel: नई फोटो जोड़ें</h3>
+                <h3>Admin Panel: Quick Update</h3>
                 <input type="file" id="fileUpload" accept="image/*">
                 <br><br>
-                <button class="btn" onclick="uploadMedia()">Upload Now</button>
+                <button class="btn" onclick="uploadMedia()">Upload to Gallery</button>
             </section>
         </div>
 
         <footer>
-            <p>&copy; 2026 दिलेश्वरी इण्टर कॉलेज | <span id="secretTrigger" onclick="activateAdmin()">Admin</span></p>
+            <p>© 2026 DIC Rudhauli | <span id="secretTrigger" onclick="activateAdmin()">Admin</span></p>
+            <p style="font-size: 11px; color: #888;">Crafted with ❤️ by Suraj Maurya</p>
         </footer>
     </div>
 
     <script>
-        // Splash Screen Logic
+        // 1. Splash Screen Timing
         setTimeout(() => {
             document.getElementById('start-overlay').style.opacity = '0';
             setTimeout(() => {
@@ -157,28 +179,28 @@
             }, 1000);
         }, 3000);
 
-        // Admin Logic (5 taps on Admin text in footer)
+        // 2. Sidebar Functions
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "280px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+
+        // 3. Admin Panel Unlock (5 taps)
         let taps = 0;
         function activateAdmin() {
             taps++;
             if(taps === 5) {
                 document.getElementById('adminSection').style.display = 'block';
                 document.getElementById('adminSection').scrollIntoView();
-                alert("डैशबोर्ड अनलॉक हो गया!");
+                alert("Welcome Suraj! Admin Panel Unlocked.");
+                taps = 0;
             }
         }
 
         function uploadMedia(){
-            const fileInput = document.getElementById("fileUpload");
-            const gallery = document.getElementById("mainGallery");
-            const file = fileInput.files[0];
-            if(!file) return alert("फोटो चुनें");
-            const url = URL.createObjectURL(file);
-            const div = document.createElement("div");
-            div.className = "gallery-item";
-            div.innerHTML = `<img src="${url}">`;
-            gallery.prepend(div);
-            fileInput.value = "";
+            alert("यह फीचर अभी लोकल प्रीव्यू के लिए है। सर्वर सेटअप के बाद फोटो सेव होंगी।");
         }
     </script>
 </body>
