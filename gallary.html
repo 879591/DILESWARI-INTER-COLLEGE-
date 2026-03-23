@@ -3,174 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Dileswari Inter College</title>
+<title>Dileshwari Inter College Gallery</title>
 
 <style>
-
-body{
-margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:#f4f6fb;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
 }
 
-/* NAVBAR */
-
-nav{
-background:linear-gradient(90deg,#0044ff,#00c6ff);
-padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-color:white;
+header {
+    text-align: center;
+    padding: 20px;
+    background: #1e293b;
+    font-size: 24px;
+    font-weight: bold;
 }
 
-nav h1{
-margin:0;
-font-size:22px;
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+    padding: 20px;
 }
 
-nav ul{
-list-style:none;
-display:flex;
-gap:20px;
+.card {
+    background: #1e293b;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.3s;
 }
 
-nav ul li a{
-color:white;
-text-decoration:none;
-font-weight:bold;
+.card:hover {
+    transform: scale(1.03);
 }
 
-nav ul li a:hover{
-color:yellow;
+.card img, .card iframe {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
 }
 
-/* HERO */
-
-.hero{
-height:80vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-background:linear-gradient(120deg,#4facfe,#00f2fe);
-color:white;
+.card p {
+    padding: 10px;
+    font-size: 14px;
+    text-align: center;
 }
-
-.hero h2{
-font-size:40px;
-margin-bottom:10px;
-}
-
-.hero p{
-font-size:18px;
-}
-
-/* BUTTON */
-
-.btn{
-margin-top:20px;
-padding:12px 25px;
-background:#ffcc00;
-color:black;
-border:none;
-border-radius:30px;
-font-size:16px;
-cursor:pointer;
-transition:0.3s;
-}
-
-.btn:hover{
-background:#ff8800;
-color:white;
-transform:scale(1.1);
-}
-
-/* SECTION */
-
-.section{
-padding:60px;
-text-align:center;
-}
-
-.card{
-background:white;
-padding:30px;
-border-radius:10px;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
-max-width:600px;
-margin:auto;
-}
-
-/* FOOTER */
-
-footer{
-background:#222;
-color:white;
-text-align:center;
-padding:15px;
-}
-
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+<header>
+🔥 Dileshwari Inter College Rudhauli Basti Gallery 🔥
+</header>
 
-<nav>
-<h1>Dileswari Inter College</h1>
+<div class="gallery">
 
-<ul>
-<li><a href="#">Home</a></li>
-<li><a href="#">About</a></li>
-<li><a href="#">Courses</a></li>
-<li><a href="#">Gallery</a></li>
-<li><a href="#">Contact</a></li>
-</ul>
-</nav>
+    <!-- Video 1 -->
+    <div class="card">
+        <iframe src="https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/61575863433730/videos/1504832744070633/" 
+        frameborder="0" allowfullscreen></iframe>
+        <p>Inter House Long Jump Competition</p>
+    </div>
 
-<!-- HERO -->
+    <!-- Video 2 -->
+    <div class="card">
+        <iframe src="https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/61575863433730/posts/122155026830862114/" 
+        frameborder="0"></iframe>
+        <p>रस्सा कशी Competition (Tug of War)</p>
+    </div>
 
-<section class="hero">
+    <!-- Photo 1 -->
+    <div class="card">
+        <img src="https://via.placeholder.com/400x200?text=College+Building">
+        <p>College Building View</p>
+    </div>
 
-<h2>Welcome to Dileswari Inter College</h2>
+    <!-- Photo 2 -->
+    <div class="card">
+        <img src="https://via.placeholder.com/400x200?text=Independence+Day">
+        <p>Independence Day Celebration</p>
+    </div>
 
-<p>Quality Education For Bright Future</p>
-
-<button class="btn">Admission Open</button>
-
-</section>
-
-<!-- ABOUT -->
-
-<section class="section">
-
-<div class="card">
-
-<h2>About Our College</h2>
-
-<p>
-Dileswari Inter College provides quality education,
-modern facilities and experienced teachers to build
-a bright future for students.
-</p>
-
-<button class="btn">Learn More</button>
+    <!-- Photo 3 -->
+    <div class="card">
+        <img src="https://via.placeholder.com/400x200?text=Students+Event">
+        <p>Students Activity Event</p>
+    </div>
 
 </div>
-
-</section>
-
-<!-- FOOTER -->
-
-<footer>
-
-<p>© 2026 Dileswari Inter College | All Rights Reserved</p>
-
-</footer>
 
 </body>
 </html>
