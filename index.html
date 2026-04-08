@@ -205,36 +205,3 @@ hu<!DOCTYPE html>
     </script>
 </body>
 </html>
-// अपनी फोटो अपलोड करने का फंक्शन
-async function uploadToGallery() {
-    const fileInput = document.getElementById('imageInput'); // चेक करें कि आपकी input ID यही है
-    const file = fileInput.files[0];
-
-    if (!file) {
-        alert("कृपया पहले एक फोटो चुनें!");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'dileswari_preset'); // जो आपने Cloudinary में बनाया
-
-    try {
-        const response = await fetch('https://api.cloudinary.com/v1_1/dvfb33cbt/image/upload', {
-            method: 'POST',
-            body: formData
-        });
-
-        const data = await response.json();
-        
-        if (data.secure_url) {
-            alert("सफलता! फोटो सर्वर पर सेव हो गई।");
-            console.log("Image URL:", data.secure_url);
-            // यहाँ फोटो को गैलरी में दिखाने का कोड डालें
-        } else {
-            alert("एरर: " + data.error.message);
-        }
-    } catch (error) {
-        alert("सर्वर से कनेक्ट नहीं हो पाया!");
-    }
-}
